@@ -58,8 +58,6 @@ public class GameService {
 
         if (myScore >= 3 || opponentScore >= 3) {
             resetGame(sessionId);
-            myScore = 0;
-            opponentScore = 0;
         }
 
         Move opponentMoveOdj = game.getOpponentMove();
