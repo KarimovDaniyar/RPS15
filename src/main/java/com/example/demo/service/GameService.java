@@ -50,47 +50,46 @@ public class GameService {
     public GameResult playMove(String sessionId, String playerMove) {
         if (!sessionScore.containsKey(sessionId + "_player")) {
             sessionScore.put(sessionId + "_player", 0);
-            sessionScore.put(sessionId + "_bot", 0);
+            sessionScore.put(sessionId + "_opponent", 0);
         }
 
-        int playerScore = sessionScore.get(sessionId + "_player");
-        int botScore = sessionScore.get(sessionId + "_bot");
+        int myScore = sessionScore.get(sessionId + "_player");
+        int opponentScore = sessionScore.get(sessionId + "_opponent");
 
-        if (playerScore >= 3 || botScore >= 3) {
+        if (myScore >= 3 || opponentScore >= 3) {
             resetGame(sessionId);
-            playerScore = 0;
-            botScore = 0;
+            myScore = 0;
+            opponentScore = 0;
         }
 
-        Move botMoveOdj = game.getBotMove();
-        System.out.println("botMoveObj " + botMoveOdj);
-        String botMove = botMoveOdj.getName();
+        Move opponentMoveOdj = game.getOpponentMove();
+        String opponentMove = opponentMoveOdj.getName();
 
-        String result = game.playWithBot(playerMove, botMoveOdj);
+        String result = game.playWithBot(playerMove, opponentMoveOdj);
 
         if (result.equals(Result.WIN.getSymbol())) {
-            playerScore++;
-            sessionScore.put(sessionId + "_player", playerScore);
-        } else if (result.equals(Result.LOSS.getSymbol())) {
-            botScore++;
-            sessionScore.put(sessionId + "_bot", botScore);
+            myScore++;
+            sessionScore.put(sessionId + "_player", myScore);
+        } else if (result.equals(Result.LOSSES.getSymbol())) {
+            opponentScore++;
+            sessionScore.put(sessionId + "_opponent", opponentScore);
         }
 
         GameResult gameResult = new GameResult();
         gameResult.setPlayerMove(playerMove);
-        gameResult.setBotMove(botMove);
-        gameResult.setResult(result.equals("+") ? "WIN" : result.equals("-") ? "LOSS" : "DRAW");
-        gameResult.setPlayerScore(playerScore);
-        gameResult.setBotScore(botScore);
+        gameResult.setOpponentMove(opponentMove);
+        gameResult.setResult(result.equals("+") ? "WIN" : result.equals("-") ? "LOSSES" : "DRAW");
+        gameResult.setMyScore(myScore);
+        gameResult.setOpponentScore(opponentScore);
 
-        boolean gameOver = playerScore >= 3 || botScore >= 3;
+        boolean gameOver = myScore >= 3 || opponentScore >= 3;
         gameResult.setGameOver(gameOver);
 
         if (gameOver) {
-            if (playerScore >= 3) {
+            if (myScore >= 3) {
                 gameResult.setGameResult("YOU WIN");
             } else {
-                gameResult.setGameResult("YOU LOSS");
+                gameResult.setGameResult("YOU LOSSES");
             }
         }
 
@@ -103,7 +102,7 @@ public class GameService {
 
      public void resetGame(String sessionId) {
         sessionScore.put(sessionId + "_player", 0);
-        sessionScore.put(sessionId + "_bot", 0);
+        sessionScore.put(sessionId + "_opponent", 0);
      }
 
      public List<Move>getAvailableMoves() {

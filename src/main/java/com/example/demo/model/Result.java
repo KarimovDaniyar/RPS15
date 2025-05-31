@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 public enum Result {
-    WIN("+"), LOSS("-"), DRAW("");
+    WIN("+"), LOSSES("-"), DRAW("");
     private final String symbol;
 
     Result(String symbol) {

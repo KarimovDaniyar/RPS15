@@ -2,30 +2,30 @@ package com.example.demo.model;
 
 public class GameResult {
     private String playerMove;
-    private String botMove;
+    private String opponentMove;
     private String result;
-    private int playerScore;
-    private int botScore;
+    private int myScore;
+    private int opponentScore;
     private boolean gameOver;
     private String gameString;
     private String gameResult;
 
     public GameResult() {}
 
-    public int getBotScore() {
-        return botScore;
+    public int getOpponentScore() {
+        return opponentScore;
     }
 
-    public void setBotScore(int botScore) {
-        this.botScore = botScore;
+    public void setOpponentScore(int opponentScore) {
+        this.opponentScore = opponentScore;
     }
 
-    public int getPlayerScore() {
-        return playerScore;
+    public int getMyScore() {
+        return myScore;
     }
 
-    public void setPlayerScore(int playerScore) {
-        this.playerScore = playerScore;
+    public void setMyScore(int myScore) {
+        this.myScore = myScore;
     }
 
     public boolean isGameOver() {
@@ -52,12 +52,12 @@ public class GameResult {
         this.result = result;
     }
 
-    public String getBotMove() {
-        return botMove;
+    public String getOpponentMove() {
+        return opponentMove;
     }
 
-    public void setBotMove(String botMove) {
-        this.botMove = botMove;
+    public void setOpponentMove(String opponentMove) {
+        this.opponentMove = opponentMove;
     }
 
     public String getPlayerMove() {

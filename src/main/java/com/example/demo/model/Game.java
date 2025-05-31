@@ -31,7 +31,7 @@ public class Game {
     public String playWithBot(String move, Move second) {
         Move first = moveMap.get(move);
 
-        System.out.println("BOT MOVE" + second + " " +second.getName());
+        System.out.println("OPPONENT MOVE" + second + " " +second.getName());
 
         if (first != null) {
             System.out.println(first.getName() + " VS " + second.getName());
@@ -44,13 +44,13 @@ public class Game {
                     return Result.WIN.getSymbol();
                 } else {
                     System.out.println("Вы проиграли");
-                    return Result.LOSS.getSymbol();
+                    return Result.LOSSES.getSymbol();
                 }
             }
         } return Result.DRAW.getSymbol();
     }
 
-    public Move getBotMove() {
+    public Move getOpponentMove() {
         int randomNumber = (int) (Math.random() * moves.size());
         return moves.get(randomNumber);
     }
