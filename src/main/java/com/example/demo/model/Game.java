@@ -31,8 +31,6 @@ public class Game {
     public String playWithBot(String move, Move second) {
         Move first = moveMap.get(move);
 
-        System.out.println("OPPONENT MOVE" + second + " " +second.getName());
-
         if (first != null) {
             System.out.println(first.getName() + " VS " + second.getName());
             if (first.getName().equals(second.getName())) {

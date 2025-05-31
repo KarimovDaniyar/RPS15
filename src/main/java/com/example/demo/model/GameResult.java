@@ -1,7 +1,7 @@
 package com.example.demo.model;
 
 public class GameResult {
-    private String playerMove;
+    private String myMove;
     private String opponentMove;
     private String result;
     private int myScore;
@@ -60,12 +60,12 @@ public class GameResult {
         this.opponentMove = opponentMove;
     }
 
-    public String getPlayerMove() {
-        return playerMove;
+    public String getMyMove() {
+        return myMove;
     }
 
-    public void setPlayerMove(String playerMove) {
-        this.playerMove = playerMove;
+    public void setMyMove(String myMove) {
+        this.myMove = myMove;
     }
 
     public String getGameResult() {

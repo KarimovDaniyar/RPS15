@@ -43,38 +43,42 @@ public class GameService {
      /**
      * Обрабатывает ход игрока
      * @param sessionId ID сессии игрока
-     * @param playerMove Ход игрока (rock, paper, scissors)
+     * @param myMove Ход игрока (rock, paper, scissors)
      * @return Результат хода
      */
 
-    public GameResult playMove(String sessionId, String playerMove) {
-        if (!sessionScore.containsKey(sessionId + "_player")) {
-            sessionScore.put(sessionId + "_player", 0);
+    public GameResult playMove(String sessionId, String myMove) {
+        if (!sessionScore.containsKey(sessionId + "_my")) {
+            sessionScore.put(sessionId + "_my", 0);
             sessionScore.put(sessionId + "_opponent", 0);
         }
 
-        int myScore = sessionScore.get(sessionId + "_player");
+        int myScore = sessionScore.get(sessionId + "_my");
         int opponentScore = sessionScore.get(sessionId + "_opponent");
 
         if (myScore >= 3 || opponentScore >= 3) {
             resetGame(sessionId);
+            myScore = sessionScore.get(sessionId + "_my");
+            opponentScore = sessionScore.get(sessionId + "_opponent");
         }
 
         Move opponentMoveOdj = game.getOpponentMove();
         String opponentMove = opponentMoveOdj.getName();
 
-        String result = game.playWithBot(playerMove, opponentMoveOdj);
+        String result = game.playWithBot(myMove, opponentMoveOdj);
+        System.out.println("RESULLLLLT  " + result);
 
         if (result.equals(Result.WIN.getSymbol())) {
             myScore++;
-            sessionScore.put(sessionId + "_player", myScore);
+            sessionScore.put(sessionId + "_my", myScore);
         } else if (result.equals(Result.LOSSES.getSymbol())) {
             opponentScore++;
             sessionScore.put(sessionId + "_opponent", opponentScore);
         }
 
         GameResult gameResult = new GameResult();
-        gameResult.setPlayerMove(playerMove);
+        
+        gameResult.setMyMove(myMove);
         gameResult.setOpponentMove(opponentMove);
         gameResult.setResult(result.equals("+") ? "WIN" : result.equals("-") ? "LOSSES" : "DRAW");
         gameResult.setMyScore(myScore);
@@ -99,7 +103,7 @@ public class GameService {
      */
 
      public void resetGame(String sessionId) {
-        sessionScore.put(sessionId + "_player", 0);
+        sessionScore.put(sessionId + "_my", 0);
         sessionScore.put(sessionId + "_opponent", 0);
      }
 
