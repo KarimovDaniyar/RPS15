@@ -52,4 +52,21 @@ public class Game {
         int randomNumber = (int) (Math.random() * moves.size());
         return moves.get(randomNumber);
     }
+
+    public String playWithOpponent(String myMove, String opponentMove) {
+        Move first = moveMap.get(myMove);
+        Move second = moveMap.get(opponentMove);
+        if (first.getName().equals(second.getName())) {
+            System.out.println("Ничья");
+            return Result.DRAW.getSymbol();
+        } else {
+            if (first.getBeats().contains(second.getName())) {
+                System.out.println("Вы выиграли");
+                return Result.WIN.getSymbol();
+            } else {
+                System.out.println("Вы проиграли");
+                return Result.LOSSES.getSymbol();
+            }
+        }
+    }
 }

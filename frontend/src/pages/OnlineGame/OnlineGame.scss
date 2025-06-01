@@ -1,0 +1,193 @@
+@import '../../variables';
+
+.online-game-setup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+}
+
+.setup-container {
+  background-color: $milk-white;
+  border: 5px solid $pixel-border;
+  box-shadow: 8px 8px 0 $pixel-shadow;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.setup-header {
+  margin-bottom: 30px;
+
+  h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #666;
+  }
+}
+
+.player-form {
+  .form-group {
+    margin-bottom: 15px;
+    text-align: left;
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 3px solid $pixel-border;
+      background-color: white;
+      font-size: 16px;
+
+      &:focus {
+        outline: none;
+        border-color: darken($pixel-border, 10%);
+      }
+    }
+  }
+
+  .form-actions {
+    margin: 20px 0;
+  }
+
+  button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .create-button {
+    background-color: #2ecc71;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#2ecc71, 10%);
+    }
+  }
+
+  .join-button {
+    background-color: #3498db;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: darken(#3498db, 10%);
+    }
+  }
+
+  .form-divider {
+    position: relative;
+    margin: 30px 0;
+    text-align: center;
+    color: #888;
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 40%;
+      height: 1px;
+      background-color: #ddd;
+    }
+
+    &:before {
+      left: 0;
+    }
+
+    &:after {
+      right: 0;
+    }
+  }
+}
+
+.error-message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #ffeeee;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.waiting-message {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border: 3px dashed #ccc;
+
+  .room-code {
+    font-size: 20px;
+    margin-bottom: 20px;
+
+    strong {
+      display: block;
+      font-size: 32px;
+      color: #3498db;
+      letter-spacing: 3px;
+      margin-top: 5px;
+    }
+  }
+
+  .loading-indicator {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      background-color: #3498db;
+      border-radius: 50%;
+      margin: 0 5px;
+      animation: bounce 1.4s infinite ease-in-out;
+
+      &:nth-child(1) {
+        animation-delay: 0s;
+      }
+
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+
+  .hint {
+    font-style: italic;
+    font-size: 14px;
+    color: #888;
+    margin-top: 15px;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
