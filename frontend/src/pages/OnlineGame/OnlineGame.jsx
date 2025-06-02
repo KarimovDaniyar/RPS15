@@ -18,6 +18,8 @@ const OnlineGame = () => {
   const [error, setError] = useState('');
   const [waitingForOpponent, setWaitingForOpponent] = useState(false);
   const [timer, setTimer] = useState(7);
+  const [myName, setMyName] = useState('');
+  const [opponentName, setOpponentName] = useState('');
   const ws = useRef(null);
 
   // Получить список ходов (как в оффлайн-режиме)
@@ -90,10 +92,24 @@ const OnlineGame = () => {
       if (msg.type === 'room_created') {
         setRoomId(msg.roomId);
         setWaitingForOpponent(true);
+        setMyName(playerName); // Set your own name immediately
       }
       if (msg.type === 'player_joined') {
         setJoined(true);
         setWaitingForOpponent(false);
+
+        // Store player names if available
+        if (msg.players && msg.players.length === 2) {
+          // If you created the room, you're player1
+          // If you joined the room, you're player2
+          if (waitingForOpponent) {
+            setMyName(msg.players[0]);
+            setOpponentName(msg.players[1]);
+          } else {
+            setMyName(msg.players[1]);
+            setOpponentName(msg.players[0]);
+          }
+        }
       }
       if (msg.type === 'game_update') {
         setMyMove(msg.myMove);
@@ -102,6 +118,10 @@ const OnlineGame = () => {
         setOpponentScore(msg.opponentScore);
         setResult(msg.result);
         setGameOver(msg.gameOver);
+
+        // Update names if they're included in the message
+        if (msg.myName) setMyName(msg.myName);
+        if (msg.opponentName) setOpponentName(msg.opponentName);
       }
       if (msg.type === 'reset') {
         setMyScore(0);
@@ -210,6 +230,8 @@ const OnlineGame = () => {
         gameOver={gameOver}
         onCardClick={playGame}
         startNewGame={startNewGame}
+        myName={myName}
+        opponentName={opponentName}
       />
     </>
   );
