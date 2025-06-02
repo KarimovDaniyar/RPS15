@@ -41,10 +41,10 @@ public class GameService {
     }
 
      /**
-     * Обрабатывает ход игрока
-     * @param sessionId ID сессии игрока
-     * @param myMove Ход игрока (rock, paper, scissors)
-     * @return Результат хода
+     *
+     * @param sessionId
+     * @param myMove
+     * @return
      */
 
     public GameResult playMove(String sessionId, String myMove) {
