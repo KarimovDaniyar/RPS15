@@ -7,6 +7,8 @@ import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -17,6 +19,7 @@ import com.example.demo.model.Result;
 import com.example.demo.service.GameService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Component
 public class GameSocketHandler extends TextWebSocketHandler {
     private static class Player {
         public String name;
@@ -36,10 +39,15 @@ public class GameSocketHandler extends TextWebSocketHandler {
     private final Map<String, Room> rooms = new ConcurrentHashMap<>();
     private final Map<String, String> sessionToRoom = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final GameService gameService = new GameService();
-    private final Game game = gameService.getAvailableMoves() != null 
-        ? new Game(gameService.getAvailableMoves()) 
-        : new Game(); // Provide a default constructor or handle this differently
+    
+    private final GameService gameService;
+    private final Game game;
+    
+    @Autowired
+    public GameSocketHandler(GameService gameService) {
+        this.gameService = gameService;
+        this.game = new Game(gameService.getAvailableMoves());
+    }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
