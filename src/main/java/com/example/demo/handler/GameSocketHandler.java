@@ -134,6 +134,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
                             // Если кто-то не сделал ход — выставить "sponge"
                             if (room.player1.move == null) room.player1.move = "sponge";
                             if (room.player2.move == null) room.player2.move = "sponge";
+                            
                             finishRound(roomId);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -221,9 +222,5 @@ public class GameSocketHandler extends TextWebSocketHandler {
         if (room.player2 != null && room.player2.session.isOpen()) {
             room.player2.session.sendMessage(new TextMessage(json));
         }
-    }
-
-    private String getResult(String move1, String move2) {
-        return game.playWithOpponent(move1, move2);
     }
 }
