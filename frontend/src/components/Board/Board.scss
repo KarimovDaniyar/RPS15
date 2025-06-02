@@ -18,7 +18,7 @@
 .card-wrapper {
   position: absolute;
   transform-origin: center center;
-  
+
   .card-name {
     text-align: center;
     margin-top: 4px;
@@ -190,6 +190,25 @@ button {
       color: $pixel-gray;
     }
   }
+
+  .player-names {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .name {
+      font-size: 0.9em;
+      font-weight: bold;
+      flex: 1;
+    }
+
+    .vs-text {
+      margin: 0 8px;
+      color: $pixel-gray;
+      font-weight: normal;
+    }
+  }
 }
 
 // Update the card-wrapper.selected and card.selected styles
@@ -210,11 +229,61 @@ button {
   transition: transform 0.3s ease;
 }
 
+// .player-name {
+//   text-align: center;
+//   font-weight: bold;
+//   margin-top: 160px;
+//   font-size: 0.9rem;
+//   max-width: 100px;
+//   overflow: hidden;
+//   // text-overflow: ellipsis;
+
+//   &.my {
+//     color: #2ecc71;
+//   }
+
+//   &.opponent {
+//     color: #e74c3c;
+//   }
+// }
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
   }
   100% {
     opacity: 1;
+  }
+}
+
+.winner-announcement {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  background-color: $milk-white;
+  border: 5px solid $pixel-border;
+  box-shadow: 6px 6px 0 $pixel-shadow;
+  padding: 20px 30px;
+  text-align: center;
+  animation: fadeIn 0.5s ease;
+
+  .winner-text {
+    color: $pixel-gray;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+  }
+
+  .winner-name {
+    color: #f39c12;
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  .winner-score {
+    font-size: 1.4rem;
+    font-weight: bold;
   }
 }

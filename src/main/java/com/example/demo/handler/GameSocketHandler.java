@@ -204,7 +204,9 @@ public class GameSocketHandler extends TextWebSocketHandler {
                 "myScore", room.player1.score,
                 "opponentScore", room.player2.score,
                 "result", resultType,
-                "gameOver", gameOver
+                "gameOver", gameOver,
+                "myName", room.player1.name,
+                "opponentName", room.player2.name
             ));
             room.player1.session.sendMessage(new TextMessage(player1Json));
         }
@@ -226,7 +228,9 @@ public class GameSocketHandler extends TextWebSocketHandler {
                 "myScore", room.player2.score,
                 "opponentScore", room.player1.score,
                 "result", player2ResultType,
-                "gameOver", gameOver
+                "gameOver", gameOver,
+                "myName", room.player2.name,
+                "opponentName", room.player1.name
             ));
             room.player2.session.sendMessage(new TextMessage(player2Json));
         }

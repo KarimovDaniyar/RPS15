@@ -13,11 +13,15 @@ const Board = ({
   gameOver,
   onCardClick,
   startNewGame,
+  myName,
+  opponentName,
 }) => {
   const boardRef = useRef(null);
   const [showScore, setShowScore] = useState(false);
   const [showGameOverButton, setShowGameOverButton] = useState(false);
   const [selectedCard, setSelectedCard] = useState(false);
+  const [showWinner, setShowWinner] = useState(false);
+  const [winnerName, setWinnerName] = useState('');
 
   // Handle card positioning in circle
   useEffect(() => {
@@ -57,29 +61,49 @@ const Board = ({
   // Handle game over button display
   useEffect(() => {
     if (gameOver) {
-      // First hide the score (consistent with normal gameplay)
+      // First hide everything
       setShowScore(false);
       setShowGameOverButton(false);
+      setShowWinner(false);
 
-      // Then show the score after 1 second (same as in normal gameplay)
+      // Determine the winner
+      let winner = '';
+      if (myScore > opponentScore) {
+        winner = myName || 'You';
+      } else if (opponentScore > myScore) {
+        winner = opponentName || 'Opponent';
+      } else {
+        winner = "It's a tie!";
+      }
+      setWinnerName(winner);
+
+      // First show the score after 1 second
       const scoreTimer = setTimeout(() => {
         setShowScore(true);
       }, 1000);
 
-      // Then show the button and hide the score after additional 2 seconds
-      const buttonTimer = setTimeout(() => {
+      // Then show winner message after 1.5 seconds
+      const winnerTimer = setTimeout(() => {
         setShowScore(false);
+        setShowWinner(true);
+      }, 2500);
+
+      // Finally show the button after additional 2 seconds
+      const buttonTimer = setTimeout(() => {
+        setShowWinner(false);
         setShowGameOverButton(true);
-      }, 3000); // 1 second for score to appear + 2 seconds to show the score
+      }, 4500);
 
       return () => {
         clearTimeout(scoreTimer);
+        clearTimeout(winnerTimer);
         clearTimeout(buttonTimer);
       };
     } else {
+      setShowWinner(false);
       setShowGameOverButton(false);
     }
-  }, [gameOver]);
+  }, [gameOver, myScore, opponentScore, myName, opponentName]);
 
   const handelSelectedCard = moveName => {
     setSelectedCard(moveName);
@@ -103,14 +127,14 @@ const Board = ({
                 }}
                 isSelected={selectedCard === move.name}
               />
-              <div className='card-name'>{move.name}</div>
+              <div className="card-name">{move.name}</div>
             </div>
           );
         })}
 
         {/* Center play area */}
         <div className="center-area">
-          {/* Bot card slot */}
+          {/* Bot/opponent card slot */}
           <div
             className={`center-card bot ${showScore && result === 'LOSSES' ? 'animate-win' : ''}`}
           >
@@ -120,10 +144,26 @@ const Board = ({
           {/* Center score - only show when not showing game over button */}
           {showScore && result && !showGameOverButton && (
             <div className="center-score">
+              <div className="player-names">
+                <span className="name">{myName || 'You'}</span>
+                <span className="vs-text">VS</span>
+                <span className="name">{opponentName || 'Opponent'}</span>
+              </div>
               <div className="versus-text">
                 {myScore} VS {opponentScore}
               </div>
               <div className={`result-text ${result.toLowerCase()}`}>{result}</div>
+            </div>
+          )}
+
+          {/* Show winner announcement */}
+          {showWinner && (
+            <div className="winner-announcement">
+              <div className="winner-text">Winner</div>
+              <div className="winner-name">{winnerName}</div>
+              <div className="winner-score">
+                {myScore} - {opponentScore}
+              </div>
             </div>
           )}
 
