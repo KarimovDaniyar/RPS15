@@ -1,94 +1,136 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Card from '../Card/Card';
 import Score from '../Scores/Scores';
 import './Board.scss';
 
-const Board = () => {
-  const [moves, setMoves] = useState([]);
-  const [myScore, setMyScore] = useState(0);
-  const [opponentScore, setOpponentScore] = useState(0);
-  const [myMove, setMyMove] = useState(null);
-  const [opponentMove, setOpponentMove] = useState(null);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+const Board = ({
+  moves,
+  myScore,
+  opponentScore,
+  myMove,
+  opponentMove,
+  result,
+  gameOver,
+  onCardClick,
+  startNewGame,
+}) => {
+  const boardRef = useRef(null);
+  const [showScore, setShowScore] = useState(false);
+  const [showGameOverButton, setShowGameOverButton] = useState(false);
 
-  const fetchMoves = async () => {
-    //fetch = извлечь
-    try {
-      const response = await fetch('http://localhost:8080/api/game/moves'); // response = Ответ
-      if (!response.ok) {
-        throw new Error(`Ошибка сервера: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMoves(data);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Handle card positioning in circle
   useEffect(() => {
-    fetchMoves();
-  }, []);
+    if (boardRef.current && moves.length > 0) {
+      const cardWrappers = boardRef.current.querySelectorAll('.card-wrapper');
+      const totalCards = cardWrappers.length;
+      const radius = totalCards <= 8 ? 280 : 320; // Adjust radius based on number of cards
 
-  const playGame = async myMove => {
-    try {
-      setMyMove(myMove);
-      const response = await fetch(`http://localhost:8080/api/game/play?move=${myMove}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      cardWrappers.forEach((wrapper, index) => {
+        // Calculate position in the circle
+        const angle = (index / totalCards) * 2 * Math.PI; // angle in radians
+        const x = radius * Math.cos(angle);
+        const y = radius * Math.sin(angle);
+
+        // Position the card
+        wrapper.style.left = `calc(50% + ${x}px - ${wrapper.offsetWidth / 2}px)`;
+        wrapper.style.top = `calc(50% + ${y}px - ${wrapper.offsetHeight / 2}px)`;
       });
-
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMyScore(data.myScore);
-      setOpponentScore(data.opponentScore);
-      setOpponentMove(data.opponentMove);
-      setResult(data.result);
-    } catch (err) {
-      setError(err.message);
     }
-  };
+  }, [moves]);
 
-  if (loading) return <div className="loading">Loading moves...</div>;
-  if (error) return <div className="error">Error: {error}</div>;
+  // Handle card animation and score display
+  useEffect(() => {
+    if (myMove && opponentMove) {
+      // First hide the score
+      setShowScore(false);
+
+      // Then show the score after 1 second
+      const timer = setTimeout(() => {
+        setShowScore(true);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [myMove, opponentMove]);
+
+  // Handle game over button display
+  useEffect(() => {
+    if (gameOver) {
+      // First hide the score (consistent with normal gameplay)
+      setShowScore(false);
+      setShowGameOverButton(false);
+
+      // Then show the score after 1 second (same as in normal gameplay)
+      const scoreTimer = setTimeout(() => {
+        setShowScore(true);
+      }, 1000);
+
+      // Then show the button and hide the score after additional 2 seconds
+      const buttonTimer = setTimeout(() => {
+        setShowScore(false);
+        setShowGameOverButton(true);
+      }, 3000); // 1 second for score to appear + 2 seconds to show the score
+
+      return () => {
+        clearTimeout(scoreTimer);
+        clearTimeout(buttonTimer);
+      };
+    } else {
+      setShowGameOverButton(false);
+    }
+  }, [gameOver]);
 
   return (
     <div className="board-container">
-      <Score myScore={myScore} opponentScore={opponentScore} />
-      <div className="header">
-        <h2>Choose move</h2>
-        {result && (
-          <div className="game-result">
-            <p>You played: {myMove}</p>
-            <p>Opponent played: {opponentMove}</p>
-            <p className={`result ${result.toLowerCase()}`}>Result: {result}</p>
-          </div>
-        )}
-      </div>
-      <div className="board">
+      <div className="board" ref={boardRef}>
         {moves.map(move => {
           return (
-            <Card
-              className="card"
-              key={move.name}
-              title={move.name}
-              onCardClick={() => {
-                playGame(move.name);
-              }}
-            />
+            <div className="card-wrapper" key={move.name}>
+              <Card
+                title={move.name}
+                onCardClick={() => {
+                  if (!gameOver) onCardClick(move.name);
+                }}
+              />
+              {move.name}
+            </div>
           );
         })}
+
+        {/* Center play area */}
+        <div className="center-area">
+          {/* Bot card slot */}
+          <div
+            className={`center-card bot ${showScore && result === 'LOSSES' ? 'animate-win' : ''}`}
+          >
+            {opponentMove && <Card title={opponentMove} onCardClick={() => {}} />}
+          </div>
+
+          {/* Center score - only show when not showing game over button */}
+          {showScore && result && !showGameOverButton && (
+            <div className="center-score">
+              <div className="versus-text">
+                {myScore} VS {opponentScore}
+              </div>
+              <div className={`result-text ${result.toLowerCase()}`}>{result}</div>
+            </div>
+          )}
+
+          {/* Player card slot */}
+          <div
+            className={`center-card player ${showScore && result === 'WIN' ? 'animate-win' : ''}`}
+          >
+            {myMove && <Card title={myMove} onCardClick={() => {}} />}
+          </div>
+        </div>
+
+        {/* Game over button */}
+        {showGameOverButton && (
+          <button className="center-button" onClick={startNewGame}>
+            New Game
+          </button>
+        )}
       </div>
-      <button>Start Game</button>
     </div>
   );
 };

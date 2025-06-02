@@ -21,21 +21,21 @@ public class GameService {
     public GameService() {
         List<Move> moves = new ArrayList<>();
         // Расширенные правила для 15 элементов
-        moves.add(new Move("rock", List.of("scissors", "fire", "snake", "human", "wolf", "sponge", "tree")));
-        moves.add(new Move("fire", List.of("scissors", "paper", "snake", "human", "tree", "wolf", "sponge")));
-        moves.add(new Move("scissors", List.of("paper", "snake", "human", "wolf", "sponge", "tree", "air")));
-        moves.add(new Move("snake", List.of("human", "wolf", "sponge", "tree", "paper", "air", "water")));
-        moves.add(new Move("human", List.of("tree", "wolf", "sponge", "paper", "air", "water", "dragon")));
-        moves.add(new Move("tree", List.of("wolf", "dragon", "sponge", "paper", "air", "water", "devil")));
-        moves.add(new Move("wolf", List.of("sponge", "paper", "air", "water", "dragon", "lightning", "devil")));
-        moves.add(new Move("sponge", List.of("paper", "air", "water", "devil", "dragon", "gun", "lightning")));
-        moves.add(new Move("paper", List.of("air", "rock", "water", "devil", "dragon", "gun", "lightning")));
-        moves.add(new Move("air", List.of("fire", "rock", "water", "devil", "gun", "dragon", "lightning")));
-        moves.add(new Move("water", List.of("devil", "dragon", "rock", "fire", "scissors", "gun", "lightning")));
         moves.add(new Move("dragon", List.of("devil", "lightning", "fire", "rock", "scissors", "gun", "snake")));
-        moves.add(new Move("devil", List.of("rock", "fire", "scissors", "gun", "lightning", "snake", "human")));
-        moves.add(new Move("lightning", List.of("gun", "scissors", "rock", "tree", "fire", "snake", "human")));
+        moves.add(new Move("water", List.of("devil", "dragon", "rock", "fire", "scissors", "gun", "lightning")));
+        moves.add(new Move("air", List.of("fire", "rock", "water", "devil", "gun", "dragon", "lightning")));
+        moves.add(new Move("paper", List.of("air", "rock", "water", "devil", "dragon", "gun", "lightning")));
+        moves.add(new Move("sponge", List.of("paper", "air", "water", "devil", "dragon", "gun", "lightning")));
+        moves.add(new Move("wolf", List.of("sponge", "paper", "air", "water", "dragon", "lightning", "devil")));
+        moves.add(new Move("tree", List.of("wolf", "dragon", "sponge", "paper", "air", "water", "devil")));
+        moves.add(new Move("human", List.of("tree", "wolf", "sponge", "paper", "air", "water", "dragon")));
+        moves.add(new Move("snake", List.of("human", "wolf", "sponge", "tree", "paper", "air", "water")));
+        moves.add(new Move("scissors", List.of("paper", "snake", "human", "wolf", "sponge", "tree", "air")));
+        moves.add(new Move("fire", List.of("scissors", "paper", "snake", "human", "tree", "wolf", "sponge")));
+        moves.add(new Move("rock", List.of("scissors", "fire", "snake", "human", "wolf", "sponge", "tree")));
         moves.add(new Move("gun", List.of("rock", "tree", "fire", "scissors", "snake", "human", "wolf")));
+        moves.add(new Move("lightning", List.of("gun", "scissors", "rock", "tree", "fire", "snake", "human")));
+        moves.add(new Move("devil", List.of("rock", "fire", "scissors", "gun", "lightning", "snake", "human")));
         
         this.game = new Game(moves);
     }

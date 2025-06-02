@@ -1,8 +1,198 @@
+@import '../../variables';
+
+.board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
 .board {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 6px 12px;
+  position: relative;
+  width: 650px;
+  height: 650px;
+  margin: 40px auto;
+}
+
+// Position cards in a circle
+.card-wrapper {
+  position: absolute;
+  transform-origin: center center;
+  // Will be positioned by JavaScript
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.game-result {
+  margin-top: 20px;
+  padding: 15px;
+  border: 3px solid $pixel-border;
+  background-color: $milk-white;
+  box-shadow: 4px 4px 0px $pixel-shadow;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+
+  p {
+    margin: 8px 0;
+    font-family: inherit;
+  }
+
+  .result.win {
+    color: #2ecc71;
+    font-weight: bold;
+  }
+
+  .result.lose {
+    color: #e74c3c;
+    font-weight: bold;
+  }
+
+  .result.draw {
+    color: $pixel-gray;
+    font-weight: bold;
+  }
+}
+
+button {
+  background-color: $milk-white;
+  border: 4px solid $pixel-border;
+  box-shadow: 4px 4px 0px $pixel-shadow;
+  // padding: 8px 16px;
+  font-family: inherit;
+  cursor: pointer;
+  margin-top: 25px;
+  font-size: 1.1em;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 0px $pixel-shadow;
+  }
+
+  &:active {
+    box-shadow: 2px 2px 0px $pixel-shadow;
+    transform: translate(2px, 2px);
+  }
+}
+
+.score-container {
+  font-size: 1.5em;
+  font-weight: bold;
+  background-color: $milk-white;
+  border: 4px solid $pixel-border;
+  box-shadow: 4px 4px 0px $pixel-shadow;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+
+// Стиль для центральной кнопки
+.center-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% - 10px));
+  z-index: 20;
+  border: 5px solid $pixel-border;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: $milk-white;
+  box-shadow: 6px 6px 0px $pixel-shadow;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+
+  &:hover {
+    transform: translate(-50%, calc(-50% - 10px));
+  }
+}
+
+// Center area styles
+.center-area {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 5;
+}
+
+.center-card {
+  width: 100px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.5s ease;
+
+  &.bot {
+    margin-bottom: 10px;
+  }
+
+  &.player {
+    margin-top: 10px;
+  }
+
+  &.animate-win {
+    transform: translateY(-15px) scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.7));
+  }
+}
+
+.center-score {
+  background-color: $milk-white;
+  border: 3px solid $pixel-border;
+  box-shadow: 4px 4px 0px $pixel-shadow;
+  padding: 10px 15px;
+  text-align: center;
+  border-radius: 8px;
+  animation: fadeIn 0.5s ease;
+
+  .versus-text {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px;
+  }
+
+  .result-text {
+    margin-top: 5px;
+    font-weight: bold;
+
+    &.win {
+      color: #2ecc71;
+    }
+
+    &.losses {
+      color: #e74c3c;
+    }
+
+    &.draw {
+      color: $pixel-gray;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

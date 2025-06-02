@@ -1,8 +1,10 @@
 const Card = ({ title, onCardClick }) => {
+  const imgSrc = `/src/assets/${title}.png`;
+
   return (
     <div className="card">
       <button className="card-title" onClick={onCardClick}>
-        {title}
+        <img src={imgSrc} alt={title} style={{ width: 60, height: 90 }} />
       </button>
     </div>
   );
