@@ -180,7 +180,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
         String symbol = game.playWithOpponent(room.player1.move, room.player2.move);
         String resultType; // Store result as a string for the response
         
-        if (symbol.equals(Result.DRAW.getSymbol())) { // Fix: Result instead of result
+        if (symbol.equals(Result.DRAW.getSymbol())) {
             resultType = "DRAW";
             // Draw, no score change
         } else if (symbol.equals(Result.WIN.getSymbol())) {
@@ -194,18 +194,44 @@ public class GameSocketHandler extends TextWebSocketHandler {
         boolean gameOver = room.player1.score >= 3 || room.player2.score >= 3;
         room.gameOver = gameOver;
 
-        broadcast(room, Map.of(
-            "type", "game_update",
-            "roomId", roomId,
-            "myMove", room.player1.move,
-            "opponentMove", room.player2.move,
-            "myScore", room.player1.score,
-            "opponentScore", room.player2.score,
-            "result", resultType, // Fix: use the resultType string
-            "gameOver", gameOver
-        ));
+        // Send customized message to player1
+        if (room.player1 != null && room.player1.session.isOpen()) {
+            String player1Json = mapper.writeValueAsString(Map.of(
+                "type", "game_update",
+                "roomId", roomId,
+                "myMove", room.player1.move,
+                "opponentMove", room.player2.move,
+                "myScore", room.player1.score,
+                "opponentScore", room.player2.score,
+                "result", resultType,
+                "gameOver", gameOver
+            ));
+            room.player1.session.sendMessage(new TextMessage(player1Json));
+        }
+        
+        // Send customized message to player2 with reversed perspective
+        if (room.player2 != null && room.player2.session.isOpen()) {
+            String player2ResultType = resultType;
+            if (resultType.equals("WIN")) {
+                player2ResultType = "LOSSES";
+            } else if (resultType.equals("LOSSES")) {
+                player2ResultType = "WIN";
+            }
+            
+            String player2Json = mapper.writeValueAsString(Map.of(
+                "type", "game_update",
+                "roomId", roomId,
+                "myMove", room.player2.move,
+                "opponentMove", room.player1.move,
+                "myScore", room.player2.score,
+                "opponentScore", room.player1.score,
+                "result", player2ResultType,
+                "gameOver", gameOver
+            ));
+            room.player2.session.sendMessage(new TextMessage(player2Json));
+        }
 
-        // Сбросить ходы и таймер
+        // Reset moves and timer
         room.player1.move = null;
         room.player2.move = null;
         if (room.timer != null) {
