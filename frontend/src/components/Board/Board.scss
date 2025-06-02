@@ -18,7 +18,11 @@
 .card-wrapper {
   position: absolute;
   transform-origin: center center;
-  // Will be positioned by JavaScript
+  
+  .card-name {
+    text-align: center;
+    margin-top: 4px;
+  }
 }
 
 .header {
@@ -151,7 +155,7 @@ button {
 
   &.animate-win {
     transform: translateY(-15px) scale(1.1);
-    filter: drop-shadow(0 0 10px rgba(255, 255, 0, 0.7));
+    filter: drop-shadow(0 0 15px rgba(0, 158, 76, 0.7));
   }
 }
 
@@ -186,6 +190,24 @@ button {
       color: $pixel-gray;
     }
   }
+}
+
+// Update the card-wrapper.selected and card.selected styles
+
+.card-wrapper.selected {
+  z-index: 10;
+  transform: translateY(-15px) scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.card.selected {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 15px rgba(142, 68, 173, 0.8)); // Purple magic glow
+}
+
+.card-title.selected {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
 }
 
 @keyframes fadeIn {

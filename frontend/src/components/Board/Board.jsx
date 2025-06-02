@@ -17,6 +17,7 @@ const Board = ({
   const boardRef = useRef(null);
   const [showScore, setShowScore] = useState(false);
   const [showGameOverButton, setShowGameOverButton] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(false);
 
   // Handle card positioning in circle
   useEffect(() => {
@@ -80,6 +81,15 @@ const Board = ({
     }
   }, [gameOver]);
 
+  const handelSelectedCard = moveName => {
+    setSelectedCard(moveName);
+    if (!gameOver) onCardClick(moveName);
+
+    setTimeout(() => {
+      setSelectedCard(null);
+    }, 2000);
+  };
+
   return (
     <div className="board-container">
       <div className="board" ref={boardRef}>
@@ -89,10 +99,11 @@ const Board = ({
               <Card
                 title={move.name}
                 onCardClick={() => {
-                  if (!gameOver) onCardClick(move.name);
+                  handelSelectedCard(move.name);
                 }}
+                isSelected={selectedCard === move.name}
               />
-              {move.name}
+              <div className='card-name'>{move.name}</div>
             </div>
           );
         })}
