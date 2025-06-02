@@ -11,7 +11,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(new com.example.demo.handler.GameSocketHandler(), "/ws/game")
-                .setAllowedOrigins("http://localhost:5173")
-                .setAllowedOrigins("https://rps-15-karimovdaniyars-projects.vercel.app/");
+                .setAllowedOrigins("http://localhost:5173");
     }
 }
