@@ -178,3 +178,43 @@ body {
 .board {
   margin: 20px auto; // Reduced from 40px auto
 }
+
+.app-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 15px 20px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  
+  .welcome-text {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .nav-link, .nav-button {
+    background-color: $milk-white;
+    border: 3px solid $pixel-border;
+    box-shadow: 3px 3px 0 $pixel-shadow;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0 $pixel-shadow;
+    }
+  }
+  
+  .nav-button {
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1em;
+  }
+}

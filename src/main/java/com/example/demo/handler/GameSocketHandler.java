@@ -57,7 +57,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
                 if (room.player1 == null && room.player2 == null) {
                     rooms.remove(roomId);
                 }
-                // Остановить таймер, если кто-то вышел
+            
                 if (room.timer != null) {
                     room.timer.cancel();
                     room.timer = null;
@@ -124,14 +124,13 @@ public class GameSocketHandler extends TextWebSocketHandler {
             Player player = room.player1.session.getId().equals(session.getId()) ? room.player1 : room.player2;
             player.move = move;
 
-            // Если это первый ход в раунде — запускаем таймер
             if (room.timer == null) {
                 room.timer = new Timer();
                 room.timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
                         try {
-                            // Если кто-то не сделал ход — выставить "sponge"
+                          
                             if (room.player1.move == null) room.player1.move = "sponge";
                             if (room.player2.move == null) room.player2.move = "sponge";
                             
@@ -140,10 +139,10 @@ public class GameSocketHandler extends TextWebSocketHandler {
                             e.printStackTrace();
                         }
                     }
-                }, 7000); // 7 секунд
+                }, 7000);
             }
 
-            // Если оба сделали ход до таймера — завершаем раунд сразу
+
             if (room.player1.move != null && room.player2.move != null) {
                 if (room.timer != null) {
                     room.timer.cancel();
@@ -176,13 +175,13 @@ public class GameSocketHandler extends TextWebSocketHandler {
         Room room = rooms.get(roomId);
         if (room == null || room.player1 == null || room.player2 == null) return;
 
-        // Determine round result symbol and update scores
+
         String symbol = game.playWithOpponent(room.player1.move, room.player2.move);
-        String resultType; // Store result as a string for the response
+        String resultType;
         
         if (symbol.equals(Result.DRAW.getSymbol())) {
             resultType = "DRAW";
-            // Draw, no score change
+
         } else if (symbol.equals(Result.WIN.getSymbol())) {
             resultType = "WIN";
             room.player1.score++;
@@ -194,7 +193,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
         boolean gameOver = room.player1.score >= 3 || room.player2.score >= 3;
         room.gameOver = gameOver;
 
-        // Send customized message to player1
         if (room.player1 != null && room.player1.session.isOpen()) {
             String player1Json = mapper.writeValueAsString(Map.of(
                 "type", "game_update",
@@ -211,7 +209,7 @@ public class GameSocketHandler extends TextWebSocketHandler {
             room.player1.session.sendMessage(new TextMessage(player1Json));
         }
         
-        // Send customized message to player2 with reversed perspective
+
         if (room.player2 != null && room.player2.session.isOpen()) {
             String player2ResultType = resultType;
             if (resultType.equals("WIN")) {
@@ -235,7 +233,6 @@ public class GameSocketHandler extends TextWebSocketHandler {
             room.player2.session.sendMessage(new TextMessage(player2Json));
         }
 
-        // Reset moves and timer
         room.player1.move = null;
         room.player2.move = null;
         if (room.timer != null) {
