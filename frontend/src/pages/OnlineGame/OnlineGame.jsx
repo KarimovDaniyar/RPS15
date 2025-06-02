@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Board from '../../components/Board/Board';
+import './OnlineGame.scss';
 
 const WS_URL = 'ws://localhost:8080/ws/game';
 
@@ -121,39 +122,75 @@ const OnlineGame = () => {
 
   if (!joined) {
     return (
-      <div style={{ maxWidth: 400, margin: '40px auto', textAlign: 'center' }}>
-        <h2>Онлайн игра</h2>
-        <input
-          placeholder="Ваше имя"
-          value={playerName}
-          onChange={e => setPlayerName(e.target.value)}
-          style={{ marginBottom: 10, width: '90%' }}
-        />
-        <div style={{ margin: '10px 0' }}>
-          <button onClick={handleCreateRoom} disabled={!playerName || waitingForOpponent}>
-            Создать комнату
-          </button>
-        </div>
-        <div>
-          <input
-            placeholder="ID комнаты"
-            value={roomId}
-            onChange={e => setRoomId(e.target.value.toUpperCase())}
-            style={{ marginBottom: 10, width: '90%' }}
-            disabled={waitingForOpponent}
-          />
-          <button onClick={handleJoinRoom} disabled={!playerName || !roomId || waitingForOpponent}>
-            Войти в комнату
-          </button>
-        </div>
-        {error && <div style={{ color: 'red', marginTop: 10 }}>{error}</div>}
-        {waitingForOpponent && (
-          <div style={{ marginTop: 20, color: 'blue' }}>
-            <b>Ваш ID комнаты: {roomId}</b>
-            <br />
-            Ожидание второго игрока...
+      <div className="online-game-setup">
+        <div className="setup-container">
+          <div className="setup-header">
+            <h2>Онлайн игра</h2>
+            <p>Создайте комнату или присоединитесь к существующей</p>
           </div>
-        )}
+
+          <div className="player-form">
+            <div className="form-group">
+              <label htmlFor="playerName">Ваше имя</label>
+              <input
+                id="playerName"
+                placeholder="Введите ваше имя"
+                value={playerName}
+                onChange={e => setPlayerName(e.target.value)}
+              />
+            </div>
+
+            <div className="form-actions">
+              <button
+                className="create-button"
+                onClick={handleCreateRoom}
+                disabled={!playerName || waitingForOpponent}
+              >
+                Создать комнату
+              </button>
+            </div>
+
+            <div className="form-divider">или</div>
+
+            <div className="form-group">
+              <label htmlFor="roomId">ID комнаты</label>
+              <input
+                id="roomId"
+                placeholder="Введите ID существующей комнаты"
+                value={roomId}
+                onChange={e => setRoomId(e.target.value.toUpperCase())}
+                disabled={waitingForOpponent}
+              />
+            </div>
+
+            <div className="form-actions">
+              <button
+                className="join-button"
+                onClick={handleJoinRoom}
+                disabled={!playerName || !roomId || waitingForOpponent}
+              >
+                Войти в комнату
+              </button>
+            </div>
+          </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          {waitingForOpponent && (
+            <div className="waiting-message">
+              <div className="room-code">
+                Ваш ID комнаты:
+                <strong>{roomId}</strong>
+              </div>
+              <div className="loading-indicator">
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+              </div>
+              <div className="hint">Поделитесь этим кодом с другим игроком, чтобы начать игру</div>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
